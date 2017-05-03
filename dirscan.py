@@ -36,13 +36,14 @@ class DirScanMain:
 			while not self._queue.empty():
 				url = self._queue.get()
 				threading.Thread(target=self._print_msg).start()
+
 				try:
-					r = requests.get(url=url, timeout=6, headers=headers)
+					r = requests.get(url=url, timeout=8, headers=headers)
 
 					if r.status_code < 400:
-						sys.stdout.write('\r'+'[*]%s:%s'%(r.status_code,url)+'\n')
+						sys.stdout.write('\r'+'[*]%s:%s:%s\t'%(r.status_code,len(r.text),url)+'\n')
 						f = open(self.outfile+'.html','a+')			
-						f.write('<a href="'+url+'" target="_blank">'+url+'</a>')
+						f.write(str(len(r.text))+':\t<a href="'+url+'" target="_blank">'+url+'</a>')
 						f.write('\r\n</br>')
 						f.close()
 				except Exception,e:
